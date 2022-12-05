@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include "stack.h"
 
 #define CELL_COUNT 30000
 
@@ -44,9 +45,7 @@ int main(int argc, char** argv) {
 
     int curr_cell = 0;
 
-    int jump_back = 0;
-
-    int cell_tmp = 0;
+    STACK stack;
     
     for(int i=0; i<a.st_size; i++) {
         switch(filestr[i]) {
@@ -69,12 +68,13 @@ int main(int argc, char** argv) {
                 //Input, habe ich noch keinen Plan
             break;
             case '[':
-                cell_tmp = curr_cell;
-                jump_back = i+1;
+                push(&stack, curr_cell, i);
             break;
             case ']':
-                if(cells[cell_tmp]>0) {
-                    i = jump_back-1;
+                if(cells[stack.head->cell]>0) {
+                    i = stack.head->jump_to;
+                } else {
+                    pop(&stack);
                 }
             break;
         }
