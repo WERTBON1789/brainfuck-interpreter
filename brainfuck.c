@@ -79,4 +79,5 @@ int main(int argc, char** argv) {
             break;
         }
     }
+    munmap(filestr, a.st_size);
 }
